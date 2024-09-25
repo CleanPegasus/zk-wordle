@@ -58,27 +58,36 @@ template CheckLetterStatus(n) {
 } 
 
 template Wordle(n, m) {
-  signal input attemps[n][m];
+  signal input attempts[n][m];
   signal input answer[n];
-  signal output answer_hash;
+  // signal output answer_hash;
   signal output out[n][m];
 
-  signal temps[n][n][m];
 
   // TODO: constrain all inputs to be the ascii value
   // TODO: think about empty values too
   // a - 97
   // z - 122
 
+  component letterStatus[n][m];  
 
-  
+  for(var i=0; i<m; i++) {
+    for(var j=0; j<n; j++) {
 
-  // for (var i=0; i<m; i++) {
-  //   for(var j=0; j<n; j++) {
-      
-  //   }
-  // }
+      letterStatus[i][j] = CheckLetterStatus(n);
+      letterStatus[i][j].letter <== attempts[i][j];
+      letterStatus[i][j].index <== i;
+      letterStatus[i][j].answer <== answer;
+
+      out[i][j] <== letterStatus[i][j].status;
+    }
+  }
+
+  log(out[0][0]);
+  log(out[1][0]);
+  log(out[0][1]);
+  log(out[1][1]);
 
 }
 
-component main = CheckLetterStatus(5);
+component main = Wordle(2, 2);
