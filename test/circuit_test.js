@@ -13,15 +13,30 @@ const assert = chai.assert;
 describe("Wordle Test ", function (){
     this.timeout(100000);
 
-    it("Should output the greatest value from an array ", async()=>{
-      const circuit = await wasm_tester(path.join(__dirname,"../circuits","wordle.circom"));
-      await circuit.loadConstraints();
+//     it("Should output the greatest value from an array ", async()=>{
+//       const circuit = await wasm_tester(path.join(__dirname,"../circuits","wordle.circom"));
+//       await circuit.loadConstraints();
       
-      const expectedOutput =BigInt("13228398647784447210439614471177094041448537357530375455925342970514529536310");
+//       const expectedOutput =BigInt("13228398647784447210439614471177094041448537357530375455925342970514529536310");
       
-      let witness = await circuit.calculateWitness({"in_arr": [1, 6, 3, 4, 5]},true);
-      console.log(witness[1]);
-  })
+//       let witness = await circuit.calculateWitness({"in_arr": [1, 6, 3, 4, 5]},true);
+//       console.log(witness[1]);
+//   })
+
+
+    it("Should return the right status of letter ", async()=>{
+        const circuit = await wasm_tester(path.join(__dirname,"../circuits","wordle.circom"));
+        await circuit.loadConstraints();
+        
+        let witness = await circuit.calculateWitness({
+            "letter": 10,
+            "index" : 2,
+            "answer": [2, 10, 6, 10, 6]
+        }, true);
+
+        console.log(witness[1]);
+    })
+
 
 
     it("Should create a Poseidon circuit and return hash ", async()=>{
