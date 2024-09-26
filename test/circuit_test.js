@@ -66,12 +66,16 @@ describe("Wordle Test ", function () {
         console.log("Attempt 4: ", attempts[4]);
       let answer_word = "hello";
       let answer = wordToLowercaseAscii(answer_word);
-        console.log("Answer: ", answer);
+        console.log("Answer: ", answer)
       let witness = await circuit.calculateWitness({
           "attempts": attempts,
           "answer": answer
       }, true);
 
-      // console.log(witness);
+      // console.log(witness[1], witness[2], witness[3], witness[4], witness[5]);
+      // console.log(witness[6], witness[7], witness[8], witness[9], witness[10]);
+      // console.log(witness[11], witness[12], witness[13], witness[14], witness[15]);
+      // console.log(witness[16], witness[17], witness[18], witness[19], witness[20]);
+      // console.log(witness[21], witness[22], witness[23], witness[24], witness[25]);
   })
 });

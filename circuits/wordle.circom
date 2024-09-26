@@ -3,6 +3,7 @@ pragma circom 2.1.6;
 include "../node_modules/circomlib/circuits/bitify.circom";
 include "../node_modules/circomlib/circuits/comparators.circom";
 
+
 template GreatestValue(n) {
   signal input in_arr[n];
   signal output out;
@@ -40,8 +41,6 @@ template CheckLetterStatus(n) {
   component ise[n][2];
   component isz[n];
 
-  log("Letter: ", letter);
-
   for(var i=0; i<n; i++) {
     // ise(letter,answer[i]) * (1 + ise(index, i))
     ise[i][0] = IsEqual();
@@ -54,12 +53,11 @@ template CheckLetterStatus(n) {
 
     isz[i] = IsZero();
     isz[i].in <== letter;
-    statusValues[i] <== (ise[i][0].out * (1 + ise[i][1].out));
+    statusValues[i] <== (ise[i][0].out * (1 + ise[i][1].out) + 1) - isz[i].out;
   }
 
   component gv = GreatestValue(n);
   gv.in_arr <== statusValues;
-  log("output: ", gv.out);
   status <== gv.out;
 }
 
@@ -78,7 +76,7 @@ template ConstrainLimit(startVal, endVal) {
 template Wordle(n, m) {
   signal input attempts[n][m];
   signal input answer[n];
-  // signal output answer_hash;
+  signal output answer_hash;
   signal output out[n][m];
 
   // TODO: think about empty values too
@@ -90,7 +88,7 @@ template Wordle(n, m) {
     for(var j=0; j<n; j++) {
       attemptsLimitConstrains[i][j] = ConstrainLimit(97, 122);
       attemptsLimitConstrains[i][j].in <== attempts[i][j];
-      attemptsLimitConstrains[i][j].out * attempts[i][j] === 0;
+      attemptsLimitConstrains[i][j].out * attempts[i][j] === 0; // attempts[i][j] can be zero
     }
   }
 
@@ -107,18 +105,12 @@ template Wordle(n, m) {
 
       letterStatus[i][j] = CheckLetterStatus(n);
       letterStatus[i][j].letter <== attempts[i][j];
-      letterStatus[i][j].index <== i;
+      letterStatus[i][j].index <== j;
       letterStatus[i][j].answer <== answer;
 
       out[i][j] <== letterStatus[i][j].status;
     }
   }
-
-  log(out[3][0]);
-  log(out[3][1]);
-  log(out[3][2]);
-  log(out[3][3]);
-  log(out[3][4]);
 
 }
 
