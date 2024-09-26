@@ -34,9 +34,13 @@ template CheckLetterStatus(n) {
 
   signal output status;
 
+  // signal statusTemps[n];
   signal statusValues[n];
 
   component ise[n][2];
+  component isz[n];
+
+  log("Letter: ", letter);
 
   for(var i=0; i<n; i++) {
     // ise(letter,answer[i]) * (1 + ise(index, i))
@@ -48,17 +52,20 @@ template CheckLetterStatus(n) {
     ise[i][1].in[0] <== index;
     ise[i][1].in[1] <== i;
 
-    statusValues[i] <== ise[i][0].out * (1 + ise[i][1].out);
+    isz[i] = IsZero();
+    isz[i].in <== letter;
+    statusValues[i] <== (ise[i][0].out * (1 + ise[i][1].out));
   }
 
   component gv = GreatestValue(n);
   gv.in_arr <== statusValues;
-
+  log("output: ", gv.out);
   status <== gv.out;
 }
 
 template ConstrainLimit(startVal, endVal) {
   signal input in;
+  signal output out;
   signal temps[endVal-startVal+1];
 
   temps[0] <== (in - startVal);
@@ -75,6 +82,7 @@ template Wordle(n, m) {
   signal output out[n][m];
 
   // TODO: think about empty values too
+  // empty letter = 0
   // a - 97
   // z - 122
   component attemptsLimitConstrains[n][m];
@@ -82,6 +90,7 @@ template Wordle(n, m) {
     for(var j=0; j<n; j++) {
       attemptsLimitConstrains[i][j] = ConstrainLimit(97, 122);
       attemptsLimitConstrains[i][j].in <== attempts[i][j];
+      attemptsLimitConstrains[i][j].out * attempts[i][j] === 0;
     }
   }
 
@@ -105,10 +114,11 @@ template Wordle(n, m) {
     }
   }
 
-  // log(out[0][0]);
-  // log(out[1][0]);
-  // log(out[0][1]);
-  // log(out[1][1]);
+  log(out[3][0]);
+  log(out[3][1]);
+  log(out[3][2]);
+  log(out[3][3]);
+  log(out[3][4]);
 
 }
 
