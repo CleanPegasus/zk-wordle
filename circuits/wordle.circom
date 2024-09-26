@@ -55,7 +55,18 @@ template CheckLetterStatus(n) {
   gv.in_arr <== statusValues;
 
   status <== gv.out;
-} 
+}
+
+template ConstrainLimit(startVal, endVal) {
+  signal input in;
+  signal temps[endVal-startVal+1];
+
+  temps[0] <== (in - startVal);
+  for(var i=startVal+1; i<=endVal; i++) {
+    temps[i - startVal] <== temps[i - startVal - 1] * (in - i);
+  }
+  temps[endVal-startVal] === 0;
+}
 
 template Wordle(n, m) {
   signal input attempts[n][m];
@@ -63,11 +74,22 @@ template Wordle(n, m) {
   // signal output answer_hash;
   signal output out[n][m];
 
-
-  // TODO: constrain all inputs to be the ascii value
   // TODO: think about empty values too
   // a - 97
   // z - 122
+  component attemptsLimitConstrains[n][m];
+  for(var i=0; i<m; i++) {
+    for(var j=0; j<n; j++) {
+      attemptsLimitConstrains[i][j] = ConstrainLimit(97, 122);
+      attemptsLimitConstrains[i][j].in <== attempts[i][j];
+    }
+  }
+
+  component answerLimitConstrains[n];
+  for(var i=0; i<n; i++) {
+    answerLimitConstrains[i] = ConstrainLimit(97, 122);
+    answerLimitConstrains[i].in <== answer[i];
+  }
 
   component letterStatus[n][m];  
 
@@ -83,11 +105,12 @@ template Wordle(n, m) {
     }
   }
 
-  log(out[0][0]);
-  log(out[1][0]);
-  log(out[0][1]);
-  log(out[1][1]);
+  // log(out[0][0]);
+  // log(out[1][0]);
+  // log(out[0][1]);
+  // log(out[1][1]);
 
 }
 
-component main = Wordle(2, 2);
+component main = Wordle(5, 5);
+// component main = ConstrainLimit(10, 20);

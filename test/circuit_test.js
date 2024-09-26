@@ -13,6 +13,17 @@ const assert = chai.assert;
 describe("Wordle Test ", function (){
     this.timeout(100000);
 
+    // it("Should test the constrain template ", async()=>{
+    //     const circuit = await wasm_tester(path.join(__dirname,"../circuits","wordle.circom"));
+    //     await circuit.loadConstraints();
+        
+    //     const expectedOutput =BigInt("13228398647784447210439614471177094041448537357530375455925342970514529536310");
+        
+    //     let witness = await circuit.calculateWitness({"in": 20},true);
+    //     // console.log(witness[1]);
+    // })
+
+
 //     it("Should output the greatest value from an array ", async()=>{
 //       const circuit = await wasm_tester(path.join(__dirname,"../circuits","wordle.circom"));
 //       await circuit.loadConstraints();
@@ -37,16 +48,16 @@ describe("Wordle Test ", function (){
     //     console.log(witness[1]);
     // })
 
-    it("Should test the wordle template ", async()=>{
-        const circuit = await wasm_tester(path.join(__dirname,"../circuits","wordle.circom"));
-        await circuit.loadConstraints();
+    // it("Should test the wordle template ", async()=>{
+    //     const circuit = await wasm_tester(path.join(__dirname,"../circuits","wordle.circom"));
+    //     await circuit.loadConstraints();
         
-        let witness = await circuit.calculateWitness({
-            "attempts": [[1, 2], [2, 10]],
-            "answer": [2, 10]
-        }, true);
+    //     let witness = await circuit.calculateWitness({
+    //         "attempts": [[1, 2], [2, 10]],
+    //         "answer": [2, 10]
+    //     }, true);
 
-        // console.log(witness);
-    })
+    //     // console.log(witness);
+    // })
 
 })
