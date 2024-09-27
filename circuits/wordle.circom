@@ -1,8 +1,7 @@
 pragma circom 2.1.6;
 
-include "../node_modules/circomlib/circuits/bitify.circom";
 include "../node_modules/circomlib/circuits/comparators.circom";
-
+include "../node_modules/circomlib/circuits/poseidon.circom";
 
 template GreatestValue(n) {
   signal input in_arr[n];
@@ -75,7 +74,7 @@ template ConstrainLimit(startVal, endVal) {
 
 template Wordle(n, m) {
   signal input attempts[n][m];
-  signal input answer[n];
+  signal input answer[m];
   signal output answer_hash;
   signal output out[n][m];
 
@@ -111,6 +110,10 @@ template Wordle(n, m) {
       out[i][j] <== letterStatus[i][j].status;
     }
   }
+
+  component poseidon = Poseidon(m);
+  poseidon.inputs <== answer;
+  answer_hash <== poseidon.out;
 
 }
 
