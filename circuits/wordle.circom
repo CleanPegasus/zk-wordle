@@ -11,7 +11,16 @@ template GreatestValue(n) {
   signal temps[n];
   component gte[n];
 
-  // TODO: Constrain signals to 0, 1, 2
+
+// Constrain signals to 0, 1, 2, 3
+  signal constrainTemp[n][2];
+
+  for(var j=0; j < n; j++) {
+    constrainTemp[j][0] <== in_arr[j] * (in_arr[j] - 1);
+    constrainTemp[j][1] <== constrainTemp[j][0] * (in_arr[j] - 2);
+   
+    constrainTemp[j][1] * (in_arr[j] - 3) === 0;
+  }
 
   gt_arr[0] <== in_arr[0];
 
