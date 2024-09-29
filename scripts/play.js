@@ -63,18 +63,23 @@ async function main(answer) {
 
 }
 
+function arraysEqual(arr1, arr2) {
+  return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+}
+
 async function verifyProof({proof, publicSignals, results}) {
   const vKey = JSON.parse(fs.readFileSync("verification_key.json"));
   const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
   
-  publicSignals.pop();
+  publicSignals.shift();
 
   const resultFlat = results.flat(1);
-
+  publicSignals = publicSignals.map(signal => Number(signal));
   console.log("resultFkat: ", resultFlat);
   console.log("res: ", publicSignals);
   
-  return res;
+  console.log(arraysEqual(publicSignals, resultFlat));
+  return (res && (publicSignals, resultFlat));
 }
 
 function matchAttemptAnswer(attempt, answer) {
