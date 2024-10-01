@@ -12,7 +12,14 @@ template GreatestValue(n) {
   component gte[n];
 
 
-// Constrain signals to 0, 1, 2, 3
+  // Constrain signals to 0, 1, 2, 3
+  signal constrainTemps[n][2];
+  for(var i=0; i<n; i++) {
+    constrainTemps[i][0] <== in_arr[i] * (in_arr[i] - 1);
+    constrainTemps[i][1] <== constrainTemps[i][0] * (in_arr[i] - 2);
+    constrainTemps[i][1] * (in_arr[i] - 3) === 0;
+  }
+
   signal constrainTemp[n][2];
 
   for(var j=0; j < n; j++) {
@@ -87,7 +94,7 @@ template Wordle(n, m) {
   signal output answer_hash;
   signal output out[n][m];
 
-  // TODO: think about empty values too
+
   // empty letter = 0
   // a - 97
   // z - 122
@@ -127,4 +134,3 @@ template Wordle(n, m) {
 }
 
 component main = Wordle(5, 5);
-// component main = ConstrainLimit(10, 20);
