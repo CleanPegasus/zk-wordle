@@ -45,21 +45,16 @@ async function main(answer) {
     resultsEmojis.push(resultEmoji);
     console.log(resultsEmojis);
   }
+  
   let answer_ascii = wordToLowercaseAscii(answer);
   const [proof, publicSignals] = await generateProof(attempts, answer_ascii);
-
   
   console.log("proof: ", proof);
   console.log("publicSignals: ", publicSignals);
 
   const publicSignalsHash = publicSignals[0];
-
-
   const res = await verifyProof({proof, publicSignals, results });
-  
-
   console.log("res: ", res);
-
 
 }
 
